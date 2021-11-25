@@ -26,10 +26,10 @@ public class UserController {
     @PostMapping("/signup")
     public String signupSubmit(@Valid @ModelAttribute SignupRequestDto signupRequestDto, BindingResult result){
         if (result.hasErrors()){
-            return "user/signup";
+            return "user/signup";   // 회원가입 오류 페이지 (templates/user/signup.html) 이동
         }
-        userService.registerUser(signupRequestDto);
+        userService.registerUser(signupRequestDto); // service 로 dto 전달
 
-        return "user/login";   // 로그인 페이지 (templates/user/login.html) 이동
+        return "redirect:/user/login";   // 로그인 페이지 (templates/user/login.html) 이동
     }
 }
