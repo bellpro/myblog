@@ -31,6 +31,7 @@
     </style>
 </head>
 <body class="bg-light">
+
     <div class="container">
         <div class="py-5 text-center">
             <h2>회원가입</h2>
@@ -61,7 +62,9 @@
                     <label for="passwordConfirm">비밀번호 확인</label>
                     <input name="passwordConfirm" id="passwordConfirm" type="password" th:field="*{passwordConfirm}" class="form-control"
                            placeholder="비밀번호 확인 입력" aria-describedby="passwordHelp">
-                    <small id="passwordConfirmHelp" class="form-text text-muted"></small>
+                    <small id="passwordConfirmHelp" class="form-text text-muted">
+                        4자 이상 입력하세요.
+                    </small>
                     <small class="invalid-feedback">비밀번호를 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Password Error</small>
                 </div>

@@ -17,8 +17,8 @@ public class SignupRequestDto {
     @Length(min = 4, message = "비밀번호는 최소 4자 이상입니다.")    // 최소 4자 이상
     private String password;           // 비밀번호
 
-    @NotBlank // 무조건 입력 (NULL, "", " " 불가)
-    @Length(min = 4, message = "비밀번호는 최소 4자 이상입니다.")    // 최소 4자 이상
+    @NotBlank(message = "비밀번호 확인을 입력해주세요.") // 무조건 입력 (NULL, "", " " 불가)
+    @Length(min = 4, message = "비밀번호 확인은 최소 4자 이상입니다.")    // 최소 4자 이상
     private String passwordConfirm;    // 비밀번호 확인
 
 }
