@@ -1,16 +1,12 @@
 package com.bellpro.myblog.domain.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Setter // set 메소드 일괄 생성
-@Getter // get 메소드 일괄 생성
-@NoArgsConstructor  // 기본 생성자 생성
+@Data // 기본 생성자 생성, get 메소드, set 메소드 포함
 public class SignupRequestDto {
     @NotBlank(message = "닉네임을 입력해주세요.") // 무조건 입력 (NULL, "", " " 불가)
     @Length(min = 3, message = "닉네임은 최소 3자 이상입니다.") //  최소 3자 이상

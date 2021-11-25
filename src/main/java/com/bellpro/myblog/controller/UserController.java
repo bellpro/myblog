@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -18,17 +19,17 @@ public class UserController {
 
     @GetMapping("/signup")
     public String signup(Model model) {
-        model.addAttribute("signUpRequestDto", new SignupRequestDto()); // 빈 회원가입 dto 객체 생성하여 변수 전달
+        model.addAttribute("signupRequestDto", new SignupRequestDto()); // 빈 회원가입 dto 객체 생성하여 변수 전달
         return "user/signup";    // 회원가입 페이지 (templates/user/signup.html) 이동
     }
 
     @PostMapping("/signup")
-    public String signupSubmit(@Valid SignupRequestDto signupRequestDto, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            return "user/signup";    // 에러가 표시된 회원가입 페이지 (templates/user/signup.html) 이동
+    public String signupSubmit(@Valid @ModelAttribute SignupRequestDto signupRequestDto, BindingResult result){
+        if (result.hasErrors()){
+            return "user/signup";
         }
-        userService.registerUser(signupRequestDto); // dto 에러 없으면 -> service로 전달
-        return "redirect:/user/login";   // 로그인 페이지 (templates/user/login.html) 이동
-    }
+        userService.registerUser(signupRequestDto);
 
+        return "user/login";   // 로그인 페이지 (templates/user/login.html) 이동
+    }
 }

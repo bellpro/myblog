@@ -4,9 +4,12 @@ import com.bellpro.myblog.domain.Timestamped;
 import com.bellpro.myblog.domain.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 
+@Setter // set 메소드 자동 생성
 @Getter // get 메소드 자동 생성
 @NoArgsConstructor  // 기본 생성자 자동 생성
 @Entity // DB 테이블 역할
@@ -16,6 +19,7 @@ public class User extends Timestamped { // Timestamped 상속
     private Long id;                                // 기본키 ID
 
     @Column(nullable = false, unique = true)    // 열 설정 (무조건 입력, 중복 안됨)
+    @Length(min = 3)
     private String username;
 
     @Column(nullable = false)                   // 열 설정 (무조건 입력)
