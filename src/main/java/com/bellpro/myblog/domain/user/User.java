@@ -25,8 +25,8 @@ public class User extends Timestamped { // Timestamped 상속
     @Column(nullable = false)                   // 열 설정 (무조건 입력)
     private String password;
 
-//    @Column(unique = true)                          // 열 설정 (중복 안됨)
-//    private Long kakaoId;                           // 카카오 ID
+    @Column(unique = true)                          // 열 설정 (중복 안됨)
+    private Long kakaoId;                           // 카카오 ID
 
     // 회원가입 dto 생성자 (닉네임, 비밀번호)
     public User(SignupRequestDto signupRequestDto){

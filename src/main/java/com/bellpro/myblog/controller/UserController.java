@@ -47,4 +47,16 @@ public class UserController {
         return "user/login"; // 로그인 페이지 이동
     }
 
+    @GetMapping("/login/error")
+    public String loginError(Model model) {
+        model.addAttribute("loginError", true);
+        return "user/login";
+    }
+
+    @GetMapping("/login/forbidden")
+    public String forbidden(Model model) {
+        model.addAttribute("forbidden", true);
+        return "user/login";
+    }
+
 }
