@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
+@EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -19,26 +20,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) {
-        // h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
-        web
-                .ignoring()
-                .antMatchers("/h2-console/**");
-    }
-
     protected void configure(HttpSecurity http) throws Exception {
         // CSRF protection 을 비활성화
         http.csrf().disable();
 
         http.authorizeRequests()
-                // image 폴더를 login 없이 허용
-                .antMatchers("/images/**").permitAll()
-                // css 폴더를 login 없이 허용
-                .antMatchers("/css/**").permitAll()
-                // 회원 관리 처리 API 전부를 login 없이 허용
-                .antMatchers("/user/**", "/signup", "/login/**").permitAll()
+                // image, css 폴더를 login 없이 허용
+                .antMatchers("/images/**", "/css/**").permitAll()
+                // 회원 가입, 로그인 폴더를 login 없이 허용
+                .antMatchers("/user/**").permitAll()
+                // 회원 가입, 로그인 API login 없이 허용
+                .antMatchers("/signup", "/login/**").permitAll()
+                // 게시글 관리 폴더를 login 없이 허용
+                .antMatchers("/posts/**").permitAll()
                 // 게시글 관리 처리 API 허용
-                .antMatchers("/posts/**", "/api/posts", "/api/posts/**", "/posts/detail**").permitAll()
+                .antMatchers("/posts/detail", "/api/posts", "/api/posts/**" ).permitAll()
+                .antMatchers("/" ).permitAll()
                 // 그 외 어떤 요청이든 '인증'
                 .anyRequest().authenticated()
                 .and()

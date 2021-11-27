@@ -24,6 +24,12 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
+    <script th:inline="javascript">
+        let forbidden = /*[[${forbidden}]]*/ null;
+        if (forbidden != null) {
+            alert( "로그인이 필요합니다.");
+        }
+    </script>
     <style>
         * {
             font-family: 'Jua', sans-serif;
@@ -66,7 +72,7 @@
                         aria-describedby="submitHelp">로그인</button>
             </div>
             <div class="form-group">
-                <button id="login-kakao-btn" class="btn btn-warning btn-block" type="button" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=142ac4d4d536d5f44930642f0826e4a6&redirect_uri=http://jongukkim.shop/login/kakao/callback&response_type=code'"
+                <button id="login-kakao-btn" class="btn btn-warning btn-block" type="button" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=e25557cb641f00fa43300b718776339a&redirect_uri=http://localhost:8080/login/kakao/callback&response_type=code'"
                         aria-describedby="submitHelp">카카오 로그인</button>
             </div>
             <div class="form-group">
