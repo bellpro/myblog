@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @RequiredArgsConstructor    // 의존성 주입, final 필드에 대해 생성자를 생성
 @Service // Service 명시, @Component 포함: Bean 등록
 public class UserService {

@@ -1,17 +1,17 @@
 package com.bellpro.myblog.controller;
 
+import com.bellpro.myblog.domain.dto.KakaoUserInfoDto;
 import com.bellpro.myblog.domain.dto.SignupRequestDto;
+import com.bellpro.myblog.service.KakaoUserService;
 import com.bellpro.myblog.service.UserService;
 import com.bellpro.myblog.validator.SignupRequestDtoValidator;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -19,6 +19,7 @@ import javax.validation.Valid;
 @Controller // 자동 응답기, controller 명시, @Component 포항: Bean 등록
 public class UserController {
     private final UserService userService;  // controller -> service 로 dto 전달하기 위해 사용
+    private final KakaoUserService kakaoUserService;
     private final SignupRequestDtoValidator signupRequestDtoValidator;  // 닉네임 중복 검사, 닉네임과 비밀번호 일치 확인
 
     @InitBinder
@@ -59,4 +60,9 @@ public class UserController {
         return "user/login";
     }
 
+    @GetMapping("/login/kakao/callback")
+    public String kakaoLogin(@RequestParam String code) throws JsonProcessingException {
+        kakaoUserService.kakaoLogin(code);
+        return "redirect:/";
+    }
 }
