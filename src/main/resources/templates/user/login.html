@@ -1,15 +1,12 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -19,17 +16,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-
     <title>블로그</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-
-    <script th:inline="javascript">
-        let forbidden = /*[[${forbidden}]]*/ null;
-        if (forbidden != null) {
-            alert( "로그인이 필요합니다.");
-        }
-    </script>
     <style>
         * {
             font-family: 'Jua', sans-serif;
@@ -37,34 +25,33 @@
     </style>
 </head>
 <body class="bg-light">
-
 <div class="container">
     <div class="py-5 text-center">
         <h2>로그인</h2>
     </div>
     <div class="row justify-content-center">
         <form class="needs-validation col-sm-6"
-              th:action="@{/login}" method="post">
+              th:action="@{/user/login}" method="post">
             <div th:if="${param.error}" class="alert alert-danger" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true"></span>
                 </button>
-                닉네임 또는 비밀번호를 확인해주세요.
+                아이디 또는 패스워드를 확인해주세요.
             </div>
             <div class="form-group">
-                <label for="username">닉네임</label>
+                <label for="username">아이디</label>
                 <input name="username" id="username" type="text" class="form-control"
                        placeholder="" aria-describedby="nicknameHelp" required>
                 <small id="nicknameHelp" class="form-text text-muted">
-                    가입한 닉네임을 입력하세요.
+                    가입한 아이디를 입력하세요.
                 </small>
             </div>
             <div class="form-group">
-                <label for="password">비밀번호</label>
+                <label for="password">패스워드</label>
                 <input name="password" id="password" type="password" class="form-control"
                        placeholder="" aria-describedby="passwordHelp" required>
                 <small id="passwordHelp" class="form-text text-muted">
-                    비밀번호를 입력하세요.
+                    패스워드를 입력하세요.
                 </small>
             </div>
             <div class="form-group">
@@ -72,12 +59,12 @@
                         aria-describedby="submitHelp">로그인</button>
             </div>
             <div class="form-group">
-                <button id="login-kakao-btn" class="btn btn-warning btn-block" type="button" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=e25557cb641f00fa43300b718776339a&redirect_uri=http://localhost:8080/login/kakao/callback&response_type=code'"
+                <button id="login-kakao-btn" class="btn btn-warning btn-block" type="button" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=74f199bea54c9367382ae3b70ffa3e6c&redirect_uri=http://localhost:8080/user/kakao/callback&response_type=code'"
                         aria-describedby="submitHelp">카카오 로그인</button>
             </div>
             <div class="form-group">
                 <button class="btn btn-info btn-block"
-                        onclick="location.href='/signup'">회원가입</button>
+                        onclick="location.href='/user/signup'">회원가입</button>
             </div>
         </form>
     </div>

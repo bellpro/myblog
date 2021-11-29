@@ -1,8 +1,8 @@
 package com.bellpro.myblog.service;
 
-import com.bellpro.myblog.domain.dto.KakaoUserInfoDto;
-import com.bellpro.myblog.domain.user.User;
-import com.bellpro.myblog.domain.user.UserRepository;
+import com.bellpro.myblog.domain.User;
+import com.bellpro.myblog.dto.KakaoUserInfoDto;
+import com.bellpro.myblog.repository.UserRepository;
 import com.bellpro.myblog.security.UserDetailsImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,21 +27,21 @@ import java.util.UUID;
 @RequiredArgsConstructor    // 의존성 주입, final 필드에 대해 생성자를 생성
 @Service // Service 명시, @Component 포함: Bean 등록
 public class KakaoUserService {
-    private final UserRepository userRepository;    // SQL 사용 (회원가입 -> 사용자 저장)
-    private final PasswordEncoder passwordEncoder;  // 비밀번호 암호화
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void kakaoLogin(String code) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
 
-        // 2. 토큰으로 카카오 API 호출
+        // 2. "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
         KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
 
+        // 3. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
         // 4. 강제 로그인 처리
         forceLogin(kakaoUser);
-
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
@@ -52,10 +52,8 @@ public class KakaoUserService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "e25557cb641f00fa43300b718776339a");
-//        body.add("client_id", "142ac4d4d536d5f44930642f0826e4a6");
-        body.add("redirect_uri", "http://localhost:8080/login/kakao/callback");
-//        body.add("redirect_uri", "http://jongukkim.shop/login/kakao/callback");
+        body.add("client_id", "74f199bea54c9367382ae3b70ffa3e6c");
+        body.add("redirect_uri", "http://localhost:8080/user/kakao/callback");
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -101,7 +99,6 @@ public class KakaoUserService {
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
 
-        System.out.println("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
         return new KakaoUserInfoDto(id, nickname, email);
     }
 
@@ -119,7 +116,10 @@ public class KakaoUserService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            kakaoUser = new User(nickname, encodedPassword, kakaoId);
+            // email: kakao email
+            String email = kakaoUserInfo.getEmail();
+
+            kakaoUser = new User(nickname, encodedPassword, email, kakaoId);
             userRepository.save(kakaoUser);
         }
         return kakaoUser;

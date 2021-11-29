@@ -18,7 +18,7 @@
             crossorigin="anonymous"></script>
     <title>블로그</title>
     <link rel="stylesheet" href="/css/board.css">
-    <script src="/js/board.js"></script>
+    <script src="/js/detailpost.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <style>
         * {
@@ -43,28 +43,22 @@
                 <a class="nav-link" href="/">Home<span class="sr-only"></span></a>
             </li>
         </ul>
-<!--        로그인 여부에 따라 버튼 표시 설정-->
+        <!--        로그인 여부에 따라 버튼 표시 설정-->
         <button th:if="${username} == 'guest'" class="btn btn-secondary my-2 my-sm-0" onclick="window.location.href='/user/login'">로그인</button>
         <button th:if="${username} == 'guest'" class="btn btn-secondary my-2 my-sm-0" onclick="window.location.href='/user/signup'">회원가입</button>
         <button th:if="${username} != 'guest'" class="btn btn-secondary my-2 my-sm-0" onclick="window.location.href='/user/logout'">로그아웃</button>
-        <button th:if="${username} != 'guest'" class="btn btn btn-secondary my-2 my-sm-0" onclick="window.location.href='/board/write'">게시글 작성</button>
     </div>
 </nav>
 <div class="background-header"></div>
 <div class="background-body"></div>
 <div class="wrap">
     <div class="header">
-        <h3 th:if="${username} != 'guest'" th:text="|${username}님 환영합니다.|"></h3>
-        <p>오늘 하루 있었던 일을 게시글로 올려보세요!</p>
-        <form action="/board/search" method="GET" class="form-inline">  <!-- th:action 링크, method 요청방식 -->
-            <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="게시글 검색" aria-label="Search"> <!-- 입력에 변수값 keword 설정 -->
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">검색</button>
-        </form>
+        <h3>게시판 상세 페이지</h3>
+        <p>댓글을 달아 보세요!</p>
     </div>
-    <div th:if="${boards} != ''">
-    <div id="cards-box" class="area-read" th:each="board : ${boards}">
-        <!--        반복문을 돌며 게시글 목록 띄우기 -->
-        <div class="card" th:onclick="|detailBoard('${board.getId()}')|">       <!-- th:onclick="|js함수명('${변수}')| -->
+    <div id="cards-box" class="area-read">
+        <!--        반복문을 돌며 글 목록 띄우기 -->
+        <div class="card">
             <div class="metadata">
                 <div class="username" th:text="${board.getAuthor()}"></div>
                 <div class="date" th:text="${board.getCreatedAt()}"></div>
@@ -79,7 +73,42 @@
             </div>
         </div>
     </div>
+    <!--    댓글 작성란-->
+    <div class="area-write">
+        <textarea class="field-userment" placeholder="댓글을 입력해주세요" id="userment" cols="30"
+                  rows="10"></textarea>
+        <img src="/images/send.png" alt="댓글쓰기" th:onclick="|SendUserment('${board.getId()}')|">
+    </div>
+    <!--    댓글 목록란-->
+    <div th:each="comment : ${comments}">
+        <div class="card">
+            <div class="metadata">
+                <div class="username" th:text="${comment.getWriter()}"></div>
+                <div class="date" th:text="${comment.getCreatedAt()}"></div>
+            </div>
+            <div class="contents">
+                <div th:id="|${comment.getId()}-cmt|" class="text" th:text="${comment.getContent()}"></div>
+                <div th:id="|${comment.getId()}-editarea|" class="edit">
+                    <textarea th:id="|${comment.getId()}-newcmt|" class="te-edit" cols="30" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="footer">
+                <!--                글쓴이와 현재 로그인한 유저가 같을때만 삭제버튼이 보이도록-->
+                <img th:if="${username} == ${comment.getWriter()}" th:id="|${comment.getId()}-edit|"
+                     class="icon-start-edit"
+                     src="/images/edit.png" alt="" th:onclick="|EditComment('${comment.getId()}')|">
+
+                <img th:if="${username} == ${comment.getWriter()}" th:id="|${comment.getId()}-update|"
+                     class="icon-end-edit"
+                     src="/images/done.png" alt="" th:onclick="|updateComment('${comment.getId()}')|">
+
+                <img th:if="${username} == ${comment.getWriter()}" class="icon-delete"
+                     src="/images/delete.png" alt="삭제"
+                     th:onclick="|deleteComment('${comment.getId()}')|">
+            </div>
+        </div>
     </div>
 </div>
+
 </body>
 </html>
